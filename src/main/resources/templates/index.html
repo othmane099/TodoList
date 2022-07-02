@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" th:href="@{/css/main.css} "/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css} "/>
+
+
+</head>
+<body>
+
+    <div class="container">
+       <div class="card mt-5 p-1 bg-light">
+
+           <form th:method="post" th:object="${task}" th:action="@{/}">
+               <div class="input-group ">
+                   <input type="text" th:field="*{taskName}" class="form-control" placeholder="Task's name" aria-label="Task's name" aria-describedby="button-addon2">
+                   <div th:if="${#fields.hasErrors('taskName')}" th:errors="*{taskName}">Name Error</div>
+                   <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Add</button>
+               </div>
+           </form>
+
+           <div class="m-1">
+               <a class="btn btn-sm btn-outline-primary nav-btn" id="btn-all" type="button"
+                  th:data-param="${category}"
+                  th:onclick="handleBtnAll(this.getAttribute('data-param'))">All</a>
+               <a class="btn btn-sm btn-outline-primary nav-btn" id="btn-finished" type="button"
+                  th:data-param="${category}"
+                  th:onclick="handleBtnFinished(this.getAttribute('data-param'))">Finished</a>
+               <a class="btn btn-sm btn-outline-primary nav-btn" id="btn-notfinished" type="button"
+                  th:data-param="${category}"
+                  th:onclick="handleBtnNotFinished(this.getAttribute('data-param'))">Not Finished</a>
+           </div>
+
+           <div class="m-1 bg-secondary opacity-100 rounded-3 ">
+               <span class="m-1 text-white">tache : </span>
+               <span class="m-1 text-white" th:text="${taskNbr}">10</span>
+           </div>
+
+           <div class="card mt-3 p-1 bg-light">
+
+               <th:block th:each="t : ${tasks}">
+                   <div class="task-item m-1 row bg-opacity-10 bg-danger mt-1 border-1 border-danger">
+                       <p class="task-name col-10 my-auto" th:text="${t.taskName}"></p>
+                       <div class="col-2 my-auto">
+                           <form th:method="post" th:action="@{/delete}">
+                               <input type="text" name="idTask" th:value="${t.id}" hidden>
+                               <input type="text" name="taskCategory" th:value="${category}" hidden>
+                               <button class="ms-1 btn btn-warning float-end fas fa-trash-alt" type="submit"></button>
+                           </form>
+                           <form th:method="post" th:action="@{/done}">
+                               <input type="text" name="idTask" th:value="${t.id}" hidden>
+                               <input type="text" name="taskCategory" th:value="${category}" hidden>
+                               <button class="btn btn-success float-end btn-done fas fa-check" type="submit"
+                                       th:data-done="${t.isDone}"></button>
+                           </form>
+                       </div>
+                   </div>
+               </th:block>
+           </div>
+
+
+       </div>
+
+
+    </div>
+
+
+
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    <script th:inline="javascript">
+        // var nameJs = [[${taskNbr}]];
+        // var categoryTask = [[${category}]];
+    </script>
+
+
+</body>
+</html>
