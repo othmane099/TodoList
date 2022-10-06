@@ -1,7 +1,6 @@
 package org.odev.todo.service;
 
 import org.odev.todo.model.Task;
-import org.odev.todo.model.TaskState;
 import org.odev.todo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,9 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task addTask(Task task){
+    public void addTask(Task task){
         task.setIsDone(false);
-        return taskRepository.save(task);
+        taskRepository.save(task);
     }
 
     public List<Task> getAllTasks(){
@@ -38,13 +37,12 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public Optional<Task> doneTask(Long id){
+    public void doneTask(Long id){
         Optional<Task> t = taskRepository.findById(id);
         t.ifPresent(task -> {
             task.setIsDone(!task.getIsDone());
             taskRepository.save(t.get());
         });
-        return t;
     }
 }
 
